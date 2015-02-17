@@ -1,45 +1,66 @@
 ##################################################
-This is a Gforth library that gives low level access to Raspberry Pi GPIO Header!
-The access is done in C via Wrapper functions that are written in the Gforth library.
-The C code is included with a Makefile that creates a shared library. 
-The C code it self is mostly from Alanbarr/RaspberryPi-GPIO git repository.
-***** Note the gpio.c code is updated to have pin number error detection on Rev 2 
-***** Raspberry Pi boards.  This means it will not work on Rev 1 boards with out changing code back.
-This library now has I2C working on P1-03(as I2C1_SDA) P1-05(as I2C1_SCL) and again this is Rev 2 board only!
-The C shared library is now version 0.0.2 ( more testing is needed! )
-I added a DS1307 Real time clock library in Gforth what works via I2C.
-I added a Pi_pinouts file for the Rev 2 Raspberry Pi P1 header.
+This is a modified and extended version of the project published at https://github.com/harrypower/Rpi_Gforth_GPIO
+For further library installation or modification help see the readme on the page linked above.
+
+For basic installation instruction scroll down.
+
+If you don't know what Forth is and want to learn more (even if you've never programmed before) see http://home.iae.nl/users/mhx/sf.html or pick up a physical copy of Starting Forth (it's out of print but I got mine very cheaply as an ex-library book).
+
+The file gpio.fs contains all the word defintions which make using the GPIO pins on the Pi quite straight forward to use.
+gpio.fs depends upon gpio_lib.fs which is imported automatically (if in the same folder) when gpio.fs is imported.
+
+gpio.fs is well commented and self documenting for the most part; I recomend you have read through it.
+
+Please note that the lookup table for GPIO (found in gpio.fs uses a nonstandard pin map for 0-16. It is summarised in the diagram below.
+
+Raspberry Pi Rev 2 pinout 
+
+gpio.fs #	Pin		__________	Pin		gpio.fs #
+		3v3		| P1  P2 |	5v0		
+8		GPIO02		| P3  P4 |	5v0
+9		GPIO03		| P5  P6 |	GND
+10		GPIO04		| P7  P8 |	GPIO14		0
+				| P9  P10|	GPIO15		1
+11		GPIO17		| P11 P12|	GPIO18		2
+12		GPIO27		| P13 P14|
+13		GPIO22		| P15 P16|	GPIO23		3
+				| P17 P18|	GPIO24		4
+14		GPIO10		| P19 P20|
+15		GPIO09		| P21 P22|	GPIO25		5
+16		GPIO11		| P23 P24|	GPIO08		6
+				| P25 P26|	GPIO07		7
+
+Hopefully it's obvious why I chose this non standard mapping. If not it was to allow sequential bit writing on the port starting at pin 2 and ending at pin 26 and for similar reasons on the other side.
+
+If you dislike it you can change it by modifying the GPIO word in gpio.fs but it will break other words by doing so.
+
 ##################################################
-To use first you need to compile the c code and library and install like follows:
+INSTALLATION
+
+If you do not already have Gforth installed install it using:
+	$ sudo apt-get install gforth
+
+You need to compile the C code and library and install it using:
 	$ cd c_src
 	$ sudo make 
 	$ sudo make install
-Now that you have the c shared library installed do the following
-	$ cd ..
-	$ sudo gforth
-	include rpi_GPIO_lib.fs		# note this line is entered in the gforth program and there is no prompt for this
-Now at this moment Gforth has words to do GPIO stuff.  See the code itself for some information oh how to use it!
-##################################################
-If you change any c code and need to test you will need to clear the gforth library stuff out and recompile the c library.
-Here are the commands:
-	$ cd c_src
-	$ sudo make uninstall
-	$ sudo make clean
-	$ sudo make 
-	$ sudo make install
-	$ cd ..
-Now you will need to update the rpi_GPIO_lib.fs file to use the new code that you changed or added.
-Once the rpi_GPIO_lib.fs file is complete save it and let gforth compile it to use ... this is done as follows:
+Now the library is installed.
 
-	$ ./clean		# this is a simple batch type file that simply removes the internal gforth library
-				# Note that it removes the library created with the name of mygpio so if you changed 
-				# that name in rpi_GPIO_lib.fs then you need to change that in the clean file
-	$ sudo gforth
-	include rpi_GPIO_lib.fs		
-Now the gforth has your new words and any updates or changes you made.  
-##################################################
-The file rpiGpio.h in c_src directory has a #define macro called DBG_INFO.
-This will need to be changed before compiling the code depending on if you want debug info on stderr output or not!
-See rpiGpio.h for what to change.  Default is set to not put output on stderr.
-Note the c functions all return an error code and that also is returned in the gforth wrapers so the error status is still reported just not to stderr file.
+Now go up a directory to whaere gpio_lib.fs and gpio.fs are located and open Gforth:
+	$ cd ..
+	$ sudo gforth	# note that gpio pins may not work correctly without root privileges.
 
+Inside Gforth (or any file you wish to import into gforth that builds upon the words in gpio.fs) type:
+	include gpio.fs
+
+You can move gpio.fs and gpio_lib.fs anywhere as long as they remain in the same folder or you import the files into Gforth yourself.
+
+##################################################
+EXTRA
+
+gpio_example.fs contains the original examples given by harrypower which I have built upon.
+
+If 2 4 digit 7 segment bubble displays are connected correctly to the GPIO pins running:
+ 	$ sudo gforth clock.fs & will make you a nice digital clock to run in the background while you use your pi for other non-gpio related things.
+
+The exact schematic is left as an exercise for the user given the documentation at https://learn.sparkfun.com/tutorials/bubble-display-hookup-guide and the defintion of 7time8 in gpio.fs.
