@@ -1,21 +1,22 @@
 \ This Gforth code is a Raspberry Pi GPIO library
-\    Copyright (C) 2013  Philip K. Smith
+\    Copyright (C) 2013  Philip K. Smith slightly modified by Oliver Holt 2014, 2015
 
-\    This program is free software: you can redistribute it and/or modify
-\    it under the terms of the GNU General Public License as published by
-\    the Free Software Foundation, either version 3 of the License, or
-\    (at your option) any later version.
+    \ This file is part of rpi-gforth-gpio.
 
-\    This program is distributed in the hope that it will be useful,
-\    but WITHOUT ANY WARRANTY; without even the implied warranty of
-\    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-\    GNU General Public License for more details.
+    \ rpi-gforth-gpio is free software: you can redistribute it and/or modify
+    \ it under the terms of the GNU General Public License as published by
+    \ the Free Software Foundation, either version 3 of the License, or
+    \ (at your option) any later version.
 
-\    You should have received a copy of the GNU General Public License
-\    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+    \ rpi-gforth-gpio is distributed in the hope that it will be useful,
+    \ but WITHOUT ANY WARRANTY; without even the implied warranty of
+    \ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    \ GNU General Public License for more details.
 
-\ This gforth code is used as follows:
-\ include forth_lib_example.fs	\ this will load this file into gforth and compile and run it.
+    \ You should have received a copy of the GNU General Public License
+    \ along with rpi-gforth-gpio.  If not, see <http://www.gnu.org/licenses/>.
+
+
 
 
 clear-libs
